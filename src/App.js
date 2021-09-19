@@ -1,14 +1,40 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./App.css";
 
 function App() {
   return (
     <div className="App">
+      <LoadUsers></LoadUsers>
       <Counter></Counter>
       <Counter></Counter>
       <MyComponent brand="Apple" price="5000"></MyComponent>
       <MyComponent brand="Microsoft" price="10000"></MyComponent>
       <MyComponent brand="Google" price="2000"></MyComponent>
+    </div>
+  );
+}
+
+function LoadUsers() {
+  const [users, setUsers] = useState([]);
+  useEffect(() => {
+    fetch("https://jsonplaceholder.typicode.com/users")
+      .then((res) => res.json())
+      .then((data) => setUsers(data));
+  }, []);
+  return (
+    <div>
+      <h1>Users Loaded: {users.length}</h1>
+      {users.map((user) => (
+        <User name={user.name} phone={user.phone}></User>
+      ))}
+    </div>
+  );
+}
+function User(props) {
+  return (
+    <div className="user">
+      <h2>Name: {props.name}</h2>
+      <p>Call me Baby!: {props.phone}</p>
     </div>
   );
 }
